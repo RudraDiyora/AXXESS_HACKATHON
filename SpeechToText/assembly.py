@@ -1,16 +1,10 @@
 import requests
 import time
-import websocket
-import numpy as np
-import base64
-import json
-import threading
+import os
 
-ASSEMBLYAI_REALTIME_URL = "wss://api.assemblyai.com/v2/realtime/ws?sample_rate=16000"
-API_KEY = "e433c87a86ed446fb8e24ef96cbdeab9"
 UPLOAD_URL = "https://api.assemblyai.com/v2/upload"
 TRANSCRIBE_URL = "https://api.assemblyai.com/v2/transcript"
-headers = {"authorization": API_KEY}
+headers = {"authorization": os.getenv("API_KEY")}
 
 
 def upload_file(file_path):
@@ -58,7 +52,7 @@ def format_speakers(res):
         return res["text"]
 
     speaker_map = {}
-    roles = ["Doctor", "Patient"]
+    roles = ["Doctor", "Patient", "Other"]
     formatted = []
 
     for utt in res["utterances"]:
@@ -71,47 +65,6 @@ def format_speakers(res):
         formatted.append(f"{role}: {utt['text']}")
 
     return "\n".join(formatted)
-
-class WEB:
-    def __init__(self):
-        self.ws = websocket.WebSocketApp(
-            "wss://api.assemblyai.com/v2/realtime/ws?sample_rate=16000",
-            header={"Authorization": API_KEY},
-            on_open=self.on_open,
-            on_message=self.on_message,
-            on_error=self.on_error,
-            on_close=self.on_close
-        )
-
-
-        threading.Thread(target=self.ws.run_forever).start()
-
-    def send_chunk_to_assembly(self, chunk: np.ndarray):
-        # convert float32 -> int16
-        audio_int16 = (chunk * 32767).astype('int16')
-        # convert to bytes and base64 encode
-        audio_bytes = audio_int16.tobytes()
-        audio_b64 = base64.b64encode(audio_bytes).decode('utf-8')
-        
-        data = json.dumps({"audio_data": audio_b64})
-        self.ws.send(data)
-    def on_open(ws):
-        print("WebSocket connection open, start streaming audio...")
-
-    def on_message(ws, message):
-        data = json.loads(message)
-        # Partial or final transcript
-        if "text" in data:
-            print(f"Transcript ({data.get('type', 'partial')}): {data['text']}")
-
-    def on_error(ws, error):
-        print("WebSocket error:", error)
-
-    def on_close(ws, close_status_code, close_msg):
-        print("WebSocket closed")
-
-
-WEB_HANDLER = WEB()
 
 if __name__ == "__main__":
 

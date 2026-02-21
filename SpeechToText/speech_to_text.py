@@ -9,8 +9,6 @@ import queue
 import threading
 import numpy as np
 
-from assembly import WEB_HANDLER
-
 class SPEECH_HANDLER:
     def __init__(self):
         self.sample_rate = 16000
@@ -48,11 +46,7 @@ class SPEECH_HANDLER:
                 while True:
                     chunk = self.queue.get()
                     all_chunks.append(chunk)
-                    # send chunk immediately to AssemblyAI
-                    WEB_HANDLER.send_chunk_to_assembly(chunk)
-                    # process chunk immediately
-                    text = self.process_chunk(chunk=chunk)
-                    print("Live transcription so far:", text)   # <--- prints real-time
+                 #   self.process_chunk(chunk=chunk)
 
                     # Here you could also send chunk directly to a translation API
                     # e.g., send_to_translator(chunk)
@@ -64,9 +58,7 @@ class SPEECH_HANDLER:
         recording_int16 = (recording_int16 * 32767).astype('int16')
         write(self.recording_file, self.sample_rate, recording_int16)
         print("Saved live recording:", self.recording_file)
-
-
-        #WEB_HANDLER.ws.send(json.dumps({"terminate_session": True}))
+        
 
         return self.recording_file
 
@@ -154,7 +146,7 @@ class SPEECH_HANDLER:
 
         client = OpenAI(
             base_url="https://api.featherless.ai/v1",
-            api_key="rc_dcec78432f3979ad51555b438e7927ed7ad464bccef09eeb3bc144f27f1d94d5"
+            api_key=os.getenv("FEATHERLESS_KEY")
         )
         response = client.chat.completions.create(
             model="deepseek-ai/DeepSeek-V3.1",
