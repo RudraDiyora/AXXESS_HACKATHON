@@ -6,11 +6,11 @@
   },
   "visit": {
     "date": "2026-02-21",
-    "type": "consultation",
-    "clinician": "Your care team"
+    "type": "Follow-up",
+    "clinician": "Doctor"
   },
   "clinical_data": {
-    "chief_complaint": "Throat pain",
+    "chief_complaint": "Throat pain, fever",
     "vitals": {
       "bp": "120/80",
       "hr": null,
@@ -18,15 +18,15 @@
       "o2_sat": 98
     },
     "symptoms": [
-      "throat pain",
-      "swallowing pain",
-      "fever",
-      "swollen lymph nodes"
+      "Throat pain",
+      "Fever",
+      "Painful swallowing",
+      "Swollen / tender lymph nodes"
     ],
     "diagnoses": [
       {
-        "description": "Strep throat (Pharyngitis streptococcal)",
-        "icd_code": "J02.0",
+        "description": "Strep throat",
+        "icd_code": "J03.9",
         "confidence": 1
       }
     ],
@@ -34,16 +34,16 @@
       {
         "name": "Amoxicillin",
         "dose": "10 days",
-        "frequency": "as directed",
-        "purpose": "treat strep throat"
+        "frequency": null,
+        "purpose": "Treatment of strep throat"
       },
       {
         "name": "Ibuprofen",
-        "dose": "",
-        "frequency": "as needed",
-        "purpose": "reduce fever"
+        "dose": null,
+        "frequency": null,
+        "purpose": "Fever reduction"
       }
     ],
-    "follow_up": "Follow up if symptoms do not improve after a couple of days."
+    "follow_up": "Call the office for a follow-up if symptoms not improving after a couple of days."
   }
 }
