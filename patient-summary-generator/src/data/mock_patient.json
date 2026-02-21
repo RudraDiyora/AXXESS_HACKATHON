@@ -1,0 +1,38 @@
+{
+  "patient": {
+    "name": "Margaret Williams",
+    "age": 67,
+    "preferred_language": "en"
+  },
+  "visit": {
+    "date": "2026-02-21",
+    "type": "consultation",
+    "clinician": "Dr. Smith"
+  },
+  "clinical_data": {
+    "chief_complaint": "Shortness of breath and chest tightness for 3 days",
+    "vitals": {
+      "bp": "142/88",
+      "hr": 94,
+      "temp": 98.6,
+      "o2_sat": 96
+    },
+    "symptoms": ["dyspnea", "chest tightness", "mild fatigue"],
+    "diagnoses": [
+      {
+        "description": "Hypertensive heart disease",
+        "icd_code": "I11.9",
+        "confidence": 0.91
+      }
+    ],
+    "medications_prescribed": [
+      {
+        "name": "Lisinopril",
+        "dose": "10mg",
+        "frequency": "once daily",
+        "purpose": "blood pressure"
+      }
+    ],
+    "follow_up": "Return in 2 weeks or sooner if symptoms worsen"
+  }
+}
