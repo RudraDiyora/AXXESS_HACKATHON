@@ -1,0 +1,53 @@
+{
+  "session_id": "strep_case_001",
+  "messages": [
+    {
+      "speaker": "Doctor",
+      "text": "Good morning. What brings you into the clinic today?"
+    },
+    {
+      "speaker": "Patient",
+      "text": "I have had a throat pain that is sudden and severe since yesterday, and I am running a fever."
+    },
+    {
+      "speaker": "Doctor",
+      "text": "Let me check your vitals first. Your temperature is 101.3°F, blood pressure is 120/80 mmHg, oxygen saturation is 98%, and your weight is 165 lbs."
+    },
+    {
+      "speaker": "Doctor",
+      "text": "I see. Are you having any pain and discomfort while swallowing?"
+    },
+    {
+      "speaker": "Patient",
+      "text": "Yes, it is very painful to swallow, and I have swollen, tender lymph nodes in my neck."
+    },
+    {
+      "speaker": "Doctor",
+      "text": "Let me take a look. Yes, your tonsils are red and swollen, sometimes with white spots or streaks, which is a common symptom. I am going to do a rapid swab to test for the bacteria."
+    },
+    {
+      "speaker": "Patient",
+      "text": "Okay. I don't have a cough or runny nose, though."
+    },
+    {
+      "speaker": "Doctor",
+      "text": "That actually makes strep more likely. The rapid test just came back positive, so my diagnosis is strep throat."
+    },
+    {
+      "speaker": "Patient",
+      "text": "What do I need to do to treat it?"
+    },
+    {
+      "speaker": "Doctor",
+      "text": "I am prescribing oral amoxicillin for 10 days. You can also take over-the-counter Ibuprofen to help with the fever."
+    },
+    {
+      "speaker": "Patient",
+      "text": "Sounds good. Anything else?"
+    },
+    {
+      "speaker": "Doctor",
+      "text": "Get plenty of rest and drink lots of fluids. You can return to regular activities 24 hours after taking your first dose of an antibiotic if you don't have a fever. Call the office for a follow-up if your symptoms are not improving after a couple of days."
+    }
+  ]
+}
