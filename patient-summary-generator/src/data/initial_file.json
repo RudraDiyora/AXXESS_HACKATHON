@@ -1,0 +1,48 @@
+{
+  "patient": {
+    "name": "James Rodriguez",
+    "age": 54,
+    "preferred_language": "en"
+  },
+  "visit": {
+    "date": "2026-02-21",
+    "type": "urgent care",
+    "clinician": "Your care team"
+  },
+  "clinical_data": {
+    "chief_complaint": "Throat pain and fever",
+    "vitals": {
+      "bp": "120/80",
+      "hr": null,
+      "temp": 101.3,
+      "o2_sat": 98
+    },
+    "symptoms": [
+      "Throat pain",
+      "Swollen lymph nodes",
+      "Fever"
+    ],
+    "diagnoses": [
+      {
+        "description": "Strep throat",
+        "icd_code": "J03.0",
+        "confidence": 1.0
+      }
+    ],
+    "medications_prescribed": [
+      {
+        "name": "Amoxicillin",
+        "dose": "500mg",
+        "frequency": "every 8 hours",
+        "purpose": "Treatment of strep throat"
+      },
+      {
+        "name": "Ibuprofen",
+        "dose": "",
+        "frequency": "as needed",
+        "purpose": "Fever relief"
+      }
+    ],
+    "follow_up": "If symptoms not improving after a couple of days, call the office."
+  }
+}
