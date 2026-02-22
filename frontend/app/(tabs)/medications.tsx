@@ -72,16 +72,6 @@ export default function CarePlanScreen() {
             </View>
             <ThemedText style={[styles.halfCount, { color: colors.text }]}>{appointments.length}</ThemedText>
             <ThemedText style={[styles.halfLabel, { color: colors.secondaryText }]}>Appointments</ThemedText>
-            {appointments.slice(0, 2).map((a, i) => (
-              <View key={i} style={styles.previewItem}>
-                <ThemedText style={[styles.previewText, { color: colors.text }]} numberOfLines={1}>
-                  {a.description}
-                </ThemedText>
-                {a.date ? (
-                  <ThemedText style={[styles.previewDate, { color: colors.secondaryText }]}>{a.date}</ThemedText>
-                ) : null}
-              </View>
-            ))}
             <ThemedText style={[styles.viewAll, { color: colors.tint }]}>View all →</ThemedText>
           </Pressable>
 
@@ -95,16 +85,6 @@ export default function CarePlanScreen() {
             </View>
             <ThemedText style={[styles.halfCount, { color: colors.text }]}>{labs.length}</ThemedText>
             <ThemedText style={[styles.halfLabel, { color: colors.secondaryText }]}>Pending Labs</ThemedText>
-            {labs.slice(0, 2).map((l, i) => (
-              <View key={i} style={styles.previewItem}>
-                <ThemedText style={[styles.previewText, { color: colors.text }]} numberOfLines={1}>
-                  {l.name}
-                </ThemedText>
-                {l.date ? (
-                  <ThemedText style={[styles.previewDate, { color: colors.secondaryText }]}>{l.date}</ThemedText>
-                ) : null}
-              </View>
-            ))}
             <ThemedText style={[styles.viewAll, { color: colors.tint }]}>View all →</ThemedText>
           </Pressable>
         </View>
@@ -152,9 +132,5 @@ const styles = StyleSheet.create({
   halfCount: { fontSize: 30, fontWeight: '800', lineHeight: 34 },
   halfLabel: { fontSize: 14, fontWeight: '600', marginTop: 2 },
 
-  /* Preview items in half cards */
-  previewItem: { marginTop: 10 },
-  previewText: { fontSize: 13, fontWeight: '500' },
-  previewDate: { fontSize: 12, marginTop: 2 },
-  viewAll: { fontSize: 13, fontWeight: '700', marginTop: 12, textAlign: 'center' },
+  viewAll: { fontSize: 13, fontWeight: '700', marginTop: 14, textAlign: 'center' },
 });

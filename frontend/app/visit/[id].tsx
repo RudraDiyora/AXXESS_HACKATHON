@@ -38,11 +38,12 @@ export default function VisitDetailScreen() {
       <View
         style={[styles.header, { paddingTop: insets.top + 8, backgroundColor: colors.headerBg, borderBottomColor: colors.border }]}
       >
-        <Pressable onPress={() => router.back()} style={styles.backBtn} hitSlop={12}>
-          <Ionicons name="chevron-back" size={24} color={colors.tint} />
-          <ThemedText style={[styles.backText, { color: colors.tint }]}>Visits</ThemedText>
-        </Pressable>
-        <ThemedText style={[styles.headerDate, { color: colors.text }]}>{visit.visitDate}</ThemedText>
+        <View style={styles.headerRow}>
+          <Pressable onPress={() => router.back()} style={[styles.backBtn, { backgroundColor: colors.tint + '15' }]} hitSlop={12}>
+            <Ionicons name="chevron-back" size={20} color={colors.tint} />
+          </Pressable>
+          <ThemedText style={[styles.headerDate, { color: colors.text }]}>{visit.visitDate}</ThemedText>
+        </View>
         <ThemedText style={[styles.headerDoctor, { color: colors.secondaryText }]}>
           {visit.doctorName} · {visit.specialty}
         </ThemedText>
@@ -61,7 +62,7 @@ export default function VisitDetailScreen() {
             <View style={[styles.iconCircle, { backgroundColor: colors.tint + '15' }]}>
               <Ionicons name="chatbox-ellipses" size={20} color={colors.tint} />
             </View>
-            <ThemedText style={[styles.bentoFullTitle, { color: colors.text }]}>What the Doctor Said</ThemedText>
+            <ThemedText style={[styles.bentoFullTitle, { color: colors.text }]}>Summary</ThemedText>
             <Ionicons name="chevron-forward" size={18} color={colors.icon} />
           </View>
           <ThemedText style={[styles.bentoPreview, { color: colors.secondaryText }]} numberOfLines={3}>
@@ -166,8 +167,8 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     borderBottomWidth: 1,
   },
-  backBtn: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 12 },
-  backText: { fontSize: 17, fontWeight: '500' },
+  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  backBtn: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
   headerDate: { fontSize: 26, fontWeight: '800' },
   headerDoctor: { fontSize: 15, marginTop: 4 },
   headerChief: { fontSize: 16, marginTop: 8, fontWeight: '500', lineHeight: 22 },

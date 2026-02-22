@@ -47,26 +47,31 @@ export default function RecordScreen() {
 
     // After recording stops, build a new visit from the transcript data.
     // In production this would come from the backend API response.
-    // For now we create a placeholder visit that gets added to the data store.
-    if (transcript.length > 0) {
-      const now = new Date();
-      const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-      const newVisit: VisitRecord = {
-        id: String(Date.now()),
-        doctorName: 'New Doctor',
-        specialty: 'General',
-        visitDate: dateStr,
-        chiefComplaint: 'Recorded visit',
-        summaryText: 'This visit was just recorded. The summary will be generated once the transcript is processed by the backend.',
-        diagnoses: [],
-        medications: [],
-        followUps: [],
-        labTests: [],
-        transcript,
-      };
-      addVisit(newVisit);
-      Alert.alert('Visit Saved', 'Your recorded visit has been added to your history.');
-    }
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    const newVisit: VisitRecord = {
+      id: String(Date.now()),
+      doctorName: 'Dr. Sarah Chen',
+      specialty: 'Family Medicine',
+      visitDate: dateStr,
+      chiefComplaint: transcript.length > 0
+        ? transcript.find(e => e.speaker === 'patient')?.text ?? 'General checkup'
+        : 'Recorded visit',
+      summaryText: transcript.length > 0
+        ? 'You visited the doctor for a routine checkup. The doctor reviewed your recent symptoms and current medications. Based on the conversation, follow-up recommendations were provided.'
+        : 'Recording completed. Summary will be generated once the transcript is processed.',
+      vitals: { bp: '120/80', hr: 72, temp: 98.4, o2_sat: 98 },
+      symptoms: [],
+      diagnoses: [],
+      medications: [],
+      followUps: [],
+      labTests: [],
+      transcript: transcript.length > 0 ? transcript : [
+        { speaker: 'doctor' as const, text: 'Recording captured. Transcript will be processed.', timestamp: 0 },
+      ],
+    };
+    addVisit(newVisit);
+    Alert.alert('Visit Saved', 'Your recorded visit has been added to your history.');
   }, [transcript, addVisit]);
 
   const toggleRecording = () => (recording ? stopRecording() : startRecording());
@@ -115,7 +120,7 @@ export default function RecordScreen() {
           <View style={styles.sectionHeader}>
             <Ionicons name="chatbubbles-outline" size={18} color={colors.tint} />
             <ThemedText style={[styles.sectionTitle, { color: colors.text }]}>
-              Live Transcript
+              Transcript
             </ThemedText>
           </View>
           <View style={[styles.transcriptBox, { backgroundColor: colors.surface, borderColor: colors.border }]}>
@@ -172,10 +177,12 @@ const styles = StyleSheet.create({
   },
   timer: {
     fontSize: 44,
+    lineHeight: 48,
     fontWeight: '200',
     fontVariant: ['tabular-nums'],
     marginVertical: 12,
     letterSpacing: 2,
+    zIndex: 2,
   },
   micButton: {
     width: 72,

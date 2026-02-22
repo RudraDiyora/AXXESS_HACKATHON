@@ -22,11 +22,10 @@ export default function MedsPage() {
   return (
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <View style={[styles.header, { paddingTop: insets.top + 8, backgroundColor: colors.headerBg, borderBottomColor: colors.border }]}>
-        <Pressable onPress={() => router.back()} style={styles.backBtn} hitSlop={12}>
-          <Ionicons name="chevron-back" size={24} color={colors.tint} />
-          <ThemedText style={[styles.backText, { color: colors.tint }]}>Back</ThemedText>
-        </Pressable>
-        <View style={styles.titleRow}>
+        <View style={styles.headerRow}>
+          <Pressable onPress={() => router.back()} style={[styles.backBtn, { backgroundColor: colors.tint + '15' }]} hitSlop={12}>
+            <Ionicons name="chevron-back" size={20} color={colors.tint} />
+          </Pressable>
           <Ionicons name="medkit" size={22} color={colors.tint} />
           <ThemedText style={[styles.pageTitle, { color: colors.text }]}>Medications</ThemedText>
         </View>
@@ -60,9 +59,8 @@ export default function MedsPage() {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   header: { paddingHorizontal: 20, paddingBottom: 16, borderBottomWidth: 1 },
-  backBtn: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 12 },
-  backText: { fontSize: 17, fontWeight: '500' },
-  titleRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  backBtn: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
   pageTitle: { fontSize: 24, fontWeight: '800' },
   pageSubtitle: { fontSize: 15, marginTop: 4 },
   scroll: { flex: 1 },

@@ -22,11 +22,12 @@ export default function VisitSummaryPage() {
   return (
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <View style={[styles.header, { paddingTop: insets.top + 8, backgroundColor: colors.headerBg, borderBottomColor: colors.border }]}>
-        <Pressable onPress={() => router.back()} style={styles.backBtn} hitSlop={12}>
-          <Ionicons name="chevron-back" size={24} color={colors.tint} />
-          <ThemedText style={[styles.backText, { color: colors.tint }]}>Back</ThemedText>
-        </Pressable>
-        <ThemedText style={[styles.pageTitle, { color: colors.text }]}>What the Doctor Said</ThemedText>
+        <View style={styles.headerRow}>
+          <Pressable onPress={() => router.back()} style={[styles.backBtn, { backgroundColor: colors.tint + '15' }]} hitSlop={12}>
+            <Ionicons name="chevron-back" size={20} color={colors.tint} />
+          </Pressable>
+          <ThemedText style={[styles.pageTitle, { color: colors.text }]}>Summary</ThemedText>
+        </View>
         <ThemedText style={[styles.pageSubtitle, { color: colors.secondaryText }]}>{visit.visitDate}</ThemedText>
       </View>
 
@@ -47,8 +48,8 @@ export default function VisitSummaryPage() {
 const styles = StyleSheet.create({
   screen: { flex: 1 },
   header: { paddingHorizontal: 20, paddingBottom: 16, borderBottomWidth: 1 },
-  backBtn: { flexDirection: 'row', alignItems: 'center', gap: 4, marginBottom: 12 },
-  backText: { fontSize: 17, fontWeight: '500' },
+  headerRow: { flexDirection: 'row', alignItems: 'center', gap: 12 },
+  backBtn: { width: 36, height: 36, borderRadius: 18, alignItems: 'center', justifyContent: 'center' },
   pageTitle: { fontSize: 24, fontWeight: '800' },
   pageSubtitle: { fontSize: 15, marginTop: 4 },
   scroll: { flex: 1 },
