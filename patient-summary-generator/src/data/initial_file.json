@@ -1,48 +1,22 @@
 {
   "patient": {
-    "name": "James Rodriguez",
-    "age": 54,
+    "name": "John Doe",
+    "age": 30,
     "preferred_language": "en"
   },
   "visit": {
     "date": "2026-02-21",
-    "type": "Consultation",
+    "type": "consultation",
     "clinician": "Your care team"
   },
   "clinical_data": {
-    "chief_complaint": "Throat pain and fever",
-    "vitals": {
-      "bp": "120/80",
-      "hr": null,
-      "temp": 101.3,
-      "o2_sat": 98
-    },
+    "chief_complaint": "Knee pain",
+    "vitals": null,
     "symptoms": [
-      "Throat pain",
-      "Difficulty swallowing",
-      "Neck lymphadenopathy"
+      "Knee pain"
     ],
-    "diagnoses": [
-      {
-        "description": "Strep Pharyngitis",
-        "icd_code": "J02.0",
-        "confidence": 1
-      }
-    ],
-    "medications_prescribed": [
-      {
-        "name": "Amoxicillin",
-        "dose": "500mg",
-        "frequency": "twice daily",
-        "purpose": "Treatment of strep pharyngitis"
-      },
-      {
-        "name": "Ibuprofen",
-        "dose": "",
-        "frequency": "as needed",
-        "purpose": "To reduce fever"
-      }
-    ],
-    "follow_up": "Return to regular activities 24 hours after taking the first dose of an antibiotic if no fever. Call the office for a follow-up if symptoms not improving after a couple of days."
+    "diagnoses": [],
+    "medications_prescribed": [],
+    "follow_up": ""
   }
 }
