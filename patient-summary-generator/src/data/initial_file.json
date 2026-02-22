@@ -6,8 +6,8 @@
   },
   "visit": {
     "date": "2026-02-21",
-    "type": "Unknown",
-    "clinician": "Your care team"
+    "type": "consultation",
+    "clinician": "Doctor"
   },
   "clinical_data": {
     "chief_complaint": "Knee pain",
@@ -17,6 +17,6 @@
     ],
     "diagnoses": [],
     "medications_prescribed": [],
-    "follow_up": "Unknown"
+    "follow_up": ""
   }
 }
