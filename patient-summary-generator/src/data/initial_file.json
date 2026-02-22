@@ -1,7 +1,7 @@
 {
   "patient": {
-    "name": "John Doe",
-    "age": 30,
+    "name": "James Rodriguez",
+    "age": 54,
     "preferred_language": "en"
   },
   "visit": {
@@ -10,18 +10,40 @@
     "clinician": "Your care team"
   },
   "clinical_data": {
-    "chief_complaint": "Knee pain",
+    "chief_complaint": "severe throat pain and fever",
     "vitals": {
-      "bp": null,
+      "bp": "120/80",
       "hr": null,
-      "temp": null,
-      "o2_sat": null
+      "temp": 101.3,
+      "o2_sat": 98
     },
     "symptoms": [
-      "Knee pain"
+      "throat pain",
+      "fever",
+      "pain when swallowing",
+      "swollen and tender lymph nodes"
     ],
-    "diagnoses": [],
-    "medications_prescribed": [],
-    "follow_up": ""
+    "diagnoses": [
+      {
+        "description": "Strep Pharyngitis",
+        "icd_code": "J02.0",
+        "confidence": 1
+      }
+    ],
+    "medications_prescribed": [
+      {
+        "name": "amoxicillin",
+        "dose": "unknown",
+        "frequency": "unknown",
+        "purpose": "treatment of strep pharyngitis"
+      },
+      {
+        "name": "ibuprofen",
+        "dose": "unknown",
+        "frequency": "as needed",
+        "purpose": "fever reduction"
+      }
+    ],
+    "follow_up": "Call the office if symptoms not improving after a couple of days"
   }
 }
