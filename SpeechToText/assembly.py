@@ -1,6 +1,7 @@
 import requests
 import time
 import os
+import json
 
 UPLOAD_URL = "https://api.assemblyai.com/v2/upload"
 TRANSCRIBE_URL = "https://api.assemblyai.com/v2/transcript"
@@ -63,9 +64,11 @@ def format_speakers(res):
         role = speaker_map[speaker]
         formatted.append(f"{role}: {utt['text']}")
 
-    return "\n".join(formatted)
+    print(formatted)
+    return ["\n".join(formatted), formatted]
 
-def generate_json(session_id, patient_info):
+def generate_json(data, session_id, patient_info):
+
     json_data = {
         "session_id": session_id,
         "patient": {
@@ -75,6 +78,20 @@ def generate_json(session_id, patient_info):
         },
         "messages": []
     }
+
+    for message in data:
+        speaker = message.split(":")[0]
+        text = message.split(":")[1]
+
+        json_data["messages"].append({
+            "speaker": speaker,
+            "text": text
+        })
+
+    with open("OUTPUT.json", "w") as f:
+        json.dump(json_data, f, indent=2)
+
+    return json_data
 
 if __name__ == "__main__":
 
@@ -93,5 +110,14 @@ if __name__ == "__main__":
 #   print("Transcription:\n", final_text)
 
     result = get_transcription_result(transcript_id)
-    print(format_speakers(result))
-  #  print(result.items())
+    print(format_speakers(result)[0])
+
+    json_data = generate_json(
+        format_speakers(result)[1],
+        "session_123", {
+            "name": "John Doe", 
+            "age": 30, 
+            "gender": "male"
+            }
+        )
+   # print(result.items())
