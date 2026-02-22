@@ -7,11 +7,16 @@
   "visit": {
     "date": "2026-02-21",
     "type": "consultation",
-    "clinician": "Doctor"
+    "clinician": "Your care team"
   },
   "clinical_data": {
     "chief_complaint": "Knee pain",
-    "vitals": null,
+    "vitals": {
+      "bp": null,
+      "hr": null,
+      "temp": null,
+      "o2_sat": null
+    },
     "symptoms": [
       "Knee pain"
     ],
