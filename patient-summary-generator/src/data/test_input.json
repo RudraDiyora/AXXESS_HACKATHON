@@ -13,13 +13,6 @@
       "o2_sat": 96
     },
     "symptoms": ["dyspnea", "chest tightness", "mild fatigue"],
-    "diagnoses": [
-      {
-        "description": "Hypertensive heart disease",
-        "icd_code": "I11.9",
-        "confidence": 0.91
-      }
-    ],
     "medications_prescribed": [
       {
         "name": "Lisinopril",

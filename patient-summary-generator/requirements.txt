@@ -2,3 +2,4 @@ flask==3.1.*
 flask-cors==5.0.*
 python-dotenv==1.1.*
 openai==1.82.*
+watchdog>=4.0

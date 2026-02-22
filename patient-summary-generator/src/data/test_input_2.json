@@ -1,0 +1,37 @@
+{
+  "patient": {
+    "name": "James Rodriguez",
+    "age": 54,
+    "preferred_language": "en"
+  },
+  "clinical_data": {
+    "chief_complaint": "Persistent headache and dizziness for 1 week",
+    "vitals": {
+      "bp": "158/95",
+      "hr": 78,
+      "temp": 98.2,
+      "o2_sat": 98
+    },
+    "symptoms": ["headache", "dizziness", "blurred vision"],
+    "medications_prescribed": [
+      {
+        "name": "Ibuprofen",
+        "frequency": "once daily"
+      }
+    ],
+    "follow_up": "Return in 1 week for blood pressure recheck"
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
