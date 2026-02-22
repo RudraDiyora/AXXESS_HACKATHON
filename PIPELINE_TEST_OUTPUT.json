@@ -1,0 +1,68 @@
+{
+  "pipeline_test": true,
+  "timestamp": "2026-02-22",
+  "stages": {
+    "stage_1_speech_to_text": {
+      "status": "PASS",
+      "audio_file": "/workspaces/AXXESS_HACKATHON/AudioFiles/live_output.wav",
+      "transcript_id": "46c43688-8129-4fde-86fb-3e8fb5d34c3f",
+      "speaker_count": 2,
+      "word_count": 23
+    },
+    "stage_2_structured_json": {
+      "status": "PASS",
+      "message_count": 6,
+      "session_id": "session_pipeline_test_001"
+    },
+    "stage_3_patient_summary": {
+      "status": "PASS",
+      "model": "deepseek-ai/DeepSeek-V3-0324",
+      "word_count": 149,
+      "too_long": false
+    }
+  },
+  "transcript": {
+    "session_id": "session_pipeline_test_001",
+    "patient": {
+      "name": "John Doe",
+      "age": 30,
+      "gender": "male"
+    },
+    "messages": [
+      {
+        "speaker": "Doctor",
+        "text": " Hello."
+      },
+      {
+        "speaker": "Patient",
+        "text": " Hi."
+      },
+      {
+        "speaker": "Doctor",
+        "text": " What are your symptoms today?"
+      },
+      {
+        "speaker": "Patient",
+        "text": " My knee is hurting very bad."
+      },
+      {
+        "speaker": "Doctor",
+        "text": " Oh. Why did you hurt your knee?"
+      },
+      {
+        "speaker": "Patient",
+        "text": " I don't know."
+      }
+    ]
+  },
+  "summary": {
+    "greeting": "Hello John, we\u2019re here to help you with your knee pain and make sure you feel better soon.",
+    "what_we_found": "You mentioned that your knee is hurting very badly. We didn\u2019t identify a specific cause today, but we\u2019ll keep working to understand what\u2019s going on.",
+    "your_vitals": "We didn\u2019t take your vitals today, but let us know if you\u2019d like us to check your blood pressure, heart rate, or other measurements at your next visit.",
+    "your_medications": "No medications were prescribed today, but we\u2019ll discuss options if needed after further evaluation.",
+    "watch_for": "If your knee pain gets worse, or if you notice swelling, redness, or have trouble walking, please come back or call us right away.",
+    "next_steps": "Follow up with us as needed, or if your doctor recommends another visit. Rest your knee and avoid activities that make the pain worse.",
+    "closing": "Take care, John, and don\u2019t hesitate to reach out if you need anything\u2014we\u2019re here to help!"
+  },
+  "html": "<div class=\"patient-summary\">\n      <p class=\"greeting\">Hello John, we\u2019re here to help you with your knee pain and make sure you feel better soon.</p>\n      <h3>What We Found Today</h3>\n      <p>You mentioned that your knee is hurting very badly. We didn\u2019t identify a specific cause today, but we\u2019ll keep working to understand what\u2019s going on.</p>\n      <h3>Your Vital Signs</h3>\n      <p>We didn\u2019t take your vitals today, but let us know if you\u2019d like us to check your blood pressure, heart rate, or other measurements at your next visit.</p>\n      <h3>Your Medications</h3>\n      <p>No medications were prescribed today, but we\u2019ll discuss options if needed after further evaluation.</p>\n      <h3>Things To Watch For</h3>\n      <p>If your knee pain gets worse, or if you notice swelling, redness, or have trouble walking, please come back or call us right away.</p>\n      <h3>Your Next Steps</h3>\n      <p>Follow up with us as needed, or if your doctor recommends another visit. Rest your knee and avoid activities that make the pain worse.</p>\n      <p class=\"closing\">Take care, John, and don\u2019t hesitate to reach out if you need anything\u2014we\u2019re here to help!</p>\n    </div>"
+}
