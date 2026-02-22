@@ -1,5 +1,10 @@
 {
   "session_id": "strep_case_001",
+  "patient": {
+    "name": "James Rodriguez",
+    "age": 54,
+    "preferred_language": "en"
+  },
   "messages": [
     {
       "speaker": "Doctor",
@@ -31,7 +36,7 @@
     },
     {
       "speaker": "Doctor",
-      "text": "That actually makes strep more likely. The rapid test just came back positive, so my diagnosis is strep throat."
+      "text": "That actually makes strep more likely. The rapid test just came back positive."
     },
     {
       "speaker": "Patient",
