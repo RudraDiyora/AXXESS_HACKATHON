@@ -6,7 +6,7 @@
   },
   "visit": {
     "date": "2026-02-21",
-    "type": "consultation",
+    "type": "Unknown",
     "clinician": "Your care team"
   },
   "clinical_data": {
@@ -17,6 +17,6 @@
     ],
     "diagnoses": [],
     "medications_prescribed": [],
-    "follow_up": ""
+    "follow_up": "Unknown"
   }
 }
