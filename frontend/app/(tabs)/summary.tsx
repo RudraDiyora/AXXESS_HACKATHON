@@ -7,13 +7,13 @@ import { AppHeader } from '@/components/app-header';
 import { ThemedText } from '@/components/themed-text';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
-import { getVisits } from '@/data/visits';
+import { useAppData } from '@/contexts/data-context';
 
 export default function VisitsScreen() {
   const scheme = useColorScheme() ?? 'light';
   const colors = Colors[scheme];
   const router = useRouter();
-  const visits = getVisits();
+  const { visits } = useAppData();
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.background }]}>

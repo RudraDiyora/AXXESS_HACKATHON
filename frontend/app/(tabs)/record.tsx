@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import {
   StyleSheet,
   View,
@@ -6,7 +6,14 @@ import {
   ScrollView,
   Platform,
   Alert,
+  ActivityIndicator,
 } from 'react-native';
+import {
+  useAudioRecorder,
+  AudioModule,
+  RecordingPresets,
+  setAudioModeAsync,
+} from 'expo-audio';
 import { Ionicons } from '@expo/vector-icons';
 
 import { AppHeader } from '@/components/app-header';
@@ -15,17 +22,30 @@ import { WaveformVisualizer } from '@/components/waveform-visualizer';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
 import { useAppData } from '@/contexts/data-context';
+import { runFullPipeline, pipelineResponseToVisitRecord } from '@/services/api';
 import type { TranscriptEntry } from '@/types/consultation';
-import type { VisitRecord } from '@/data/visits';
 
 export default function RecordScreen() {
   const scheme = useColorScheme() ?? 'light';
   const colors = Colors[scheme];
-  const { visits, addVisit } = useAppData();
+  const { patient, addVisit } = useAppData();
   const [recording, setRecording] = useState(false);
+  const [processing, setProcessing] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [transcript, setTranscript] = useState<TranscriptEntry[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Request microphone permission on mount
+  useEffect(() => {
+    (async () => {
+      const status = await AudioModule.requestRecordingPermissionsAsync();
+      if (!status.granted) {
+        Alert.alert('Permission Required', 'Microphone access is needed to record visits.');
+      }
+    })();
+  }, []);
 
   const formatTime = (secs: number) => {
     const m = Math.floor(secs / 60).toString().padStart(2, '0');
@@ -33,54 +53,88 @@ export default function RecordScreen() {
     return `${m}:${s}`;
   };
 
-  const startRecording = useCallback(() => {
-    setRecording(true);
-    setElapsed(0);
-    setTranscript([]);
-    timer.current = setInterval(() => setElapsed((e) => e + 1), 1000);
-    // TODO: connect to your FastAPI backend websocket
-  }, []);
+  const startRecording = useCallback(async () => {
+    try {
+      setError(null);
 
-  const stopRecording = useCallback(() => {
+      // Configure audio session for recording
+      await setAudioModeAsync({
+        allowsRecording: true,
+        playsInSilentMode: true,
+      });
+
+      // Prepare and start recording
+      await audioRecorder.prepareToRecordAsync();
+      audioRecorder.record();
+
+      setRecording(true);
+      setElapsed(0);
+      setTranscript([]);
+      timer.current = setInterval(() => setElapsed((e) => e + 1), 1000);
+    } catch (err) {
+      console.error('Failed to start recording:', err);
+      setError('Failed to start recording. Please check microphone permissions.');
+    }
+  }, [audioRecorder]);
+
+  const stopRecording = useCallback(async () => {
     setRecording(false);
     if (timer.current) clearInterval(timer.current);
 
-    // After recording stops, build a new visit from the transcript data.
-    // In production this would come from the backend API response.
-    const now = new Date();
-    const dateStr = now.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-    const newVisit: VisitRecord = {
-      id: String(Date.now()),
-      doctorName: 'Dr. Sarah Chen',
-      specialty: 'Family Medicine',
-      visitDate: dateStr,
-      chiefComplaint: transcript.length > 0
-        ? transcript.find(e => e.speaker === 'patient')?.text ?? 'General checkup'
-        : 'Recorded visit',
-      summaryText: transcript.length > 0
-        ? 'You visited the doctor for a routine checkup. The doctor reviewed your recent symptoms and current medications. Based on the conversation, follow-up recommendations were provided.'
-        : 'Recording completed. Summary will be generated once the transcript is processed.',
-      vitals: { bp: '120/80', hr: 72, temp: 98.4, o2_sat: 98 },
-      symptoms: [],
-      diagnoses: [],
-      medications: [],
-      followUps: [],
-      labTests: [],
-      transcript: transcript.length > 0 ? transcript : [
-        { speaker: 'doctor' as const, text: 'Recording captured. Transcript will be processed.', timestamp: 0 },
-      ],
-    };
-    addVisit(newVisit);
-    Alert.alert('Visit Saved', 'Your recorded visit has been added to your history.');
-  }, [transcript, addVisit]);
+    try {
+      setProcessing(true);
+      setError(null);
 
-  const toggleRecording = () => (recording ? stopRecording() : startRecording());
+      // Stop the recording — URI available on audioRecorder.uri
+      await audioRecorder.stop();
+      const uri = audioRecorder.uri;
+
+      // Reset audio mode
+      await setAudioModeAsync({ allowsRecording: false });
+
+      if (!uri) throw new Error('No audio file was created');
+
+      // Send audio to backend pipeline
+      const response = await runFullPipeline(uri, patient.name, patient.age);
+
+      // Transform API response into a VisitRecord
+      const newVisit = pipelineResponseToVisitRecord(response);
+
+      // Display transcript from the processed result
+      setTranscript(newVisit.transcript);
+
+      // Save visit
+      addVisit(newVisit);
+      Alert.alert(
+        'Visit Processed',
+        'Your visit has been transcribed, analyzed, and saved successfully.',
+      );
+    } catch (err: any) {
+      console.error('Pipeline error:', err);
+      const msg = err.message || 'Failed to process recording. Please try again.';
+      setError(msg);
+      Alert.alert('Processing Error', msg);
+    } finally {
+      setProcessing(false);
+    }
+  }, [audioRecorder, patient, addVisit]);
+
+  const toggleRecording = () => {
+    if (processing) return;
+    recording ? stopRecording() : startRecording();
+  };
 
   return (
     <View style={[styles.screen, { backgroundColor: colors.background }]}>
       <AppHeader
         title="Record Visit"
-        subtitle={recording ? 'Listening to your doctor...' : 'Record your doctor visit'}
+        subtitle={
+          processing
+            ? 'Processing your recording...'
+            : recording
+              ? 'Listening to your doctor...'
+              : 'Record your doctor visit'
+        }
       />
 
       <ScrollView
@@ -97,23 +151,41 @@ export default function RecordScreen() {
             {formatTime(elapsed)}
           </ThemedText>
 
-          <Pressable
-            onPress={toggleRecording}
-            style={({ pressed }) => [
-              styles.micButton,
-              {
-                backgroundColor: recording ? '#EF4444' : colors.tint,
-                transform: [{ scale: pressed ? 0.9 : 1 }],
-              },
-            ]}
-          >
-            <Ionicons name={recording ? 'stop' : 'mic'} size={32} color="#fff" />
-          </Pressable>
+          {processing ? (
+            <View style={[styles.micButton, { backgroundColor: colors.tint, opacity: 0.8 }]}>
+              <ActivityIndicator size="large" color="#fff" />
+            </View>
+          ) : (
+            <Pressable
+              onPress={toggleRecording}
+              style={({ pressed }) => [
+                styles.micButton,
+                {
+                  backgroundColor: recording ? '#EF4444' : colors.tint,
+                  transform: [{ scale: pressed ? 0.9 : 1 }],
+                },
+              ]}
+            >
+              <Ionicons name={recording ? 'stop' : 'mic'} size={32} color="#fff" />
+            </Pressable>
+          )}
 
           <ThemedText style={[styles.hint, { color: colors.secondaryText }]}>
-            {recording ? 'Tap to stop recording' : 'Tap to start recording'}
+            {processing
+              ? 'Transcribing & analyzing your visit...'
+              : recording
+                ? 'Tap to stop recording'
+                : 'Tap to start recording'}
           </ThemedText>
         </View>
+
+        {/* Error message */}
+        {error && (
+          <View style={[styles.errorCard, { backgroundColor: '#FEE2E2', borderColor: '#FECACA' }]}>
+            <Ionicons name="alert-circle" size={16} color="#DC2626" />
+            <ThemedText style={styles.errorText}>{error}</ThemedText>
+          </View>
+        )}
 
         {/* Live Transcript */}
         <View style={styles.transcriptSection}>
@@ -219,4 +291,14 @@ const styles = StyleSheet.create({
   },
   speakerLabel: { fontSize: 11, fontWeight: '700' },
   transcriptText: { flex: 1, fontSize: 14, lineHeight: 20 },
+  errorCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginTop: 12,
+    padding: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  errorText: { color: '#DC2626', fontSize: 13, flex: 1, fontWeight: '500' },
 });

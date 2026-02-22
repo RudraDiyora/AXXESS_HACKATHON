@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import type { VisitRecord } from '@/data/visits';
+import { _setVisits } from '@/data/visits';
 
 import rawData from '@/data.json';
 
@@ -39,6 +40,12 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     rawData.caregiver as CaregiverInfo
   );
   const [visits, setVisits] = useState<VisitRecord[]>(rawData.visits as VisitRecord[]);
+
+  // Keep the module-level visits store in sync with context state
+  // so that screens using getVisits() / getVisit() stay up-to-date.
+  useEffect(() => {
+    _setVisits(visits);
+  }, [visits]);
 
   const addVisit = useCallback((visit: VisitRecord) => {
     setVisits((prev) => [visit, ...prev]);

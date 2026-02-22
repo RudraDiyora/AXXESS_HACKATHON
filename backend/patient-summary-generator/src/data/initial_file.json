@@ -1,0 +1,49 @@
+{
+  "patient": {
+    "name": "James Rodriguez",
+    "age": 54,
+    "preferred_language": "en"
+  },
+  "visit": {
+    "date": "2026-02-21",
+    "type": "consultation",
+    "clinician": "Your care team"
+  },
+  "clinical_data": {
+    "chief_complaint": "severe throat pain and fever",
+    "vitals": {
+      "bp": "120/80",
+      "hr": null,
+      "temp": 101.3,
+      "o2_sat": 98
+    },
+    "symptoms": [
+      "throat pain",
+      "fever",
+      "pain when swallowing",
+      "swollen and tender lymph nodes"
+    ],
+    "diagnoses": [
+      {
+        "description": "Strep Pharyngitis",
+        "icd_code": "J02.0",
+        "confidence": 1
+      }
+    ],
+    "medications_prescribed": [
+      {
+        "name": "amoxicillin",
+        "dose": "unknown",
+        "frequency": "unknown",
+        "purpose": "treatment of strep pharyngitis"
+      },
+      {
+        "name": "ibuprofen",
+        "dose": "unknown",
+        "frequency": "as needed",
+        "purpose": "fever reduction"
+      }
+    ],
+    "follow_up": "Call the office if symptoms not improving after a couple of days"
+  }
+}

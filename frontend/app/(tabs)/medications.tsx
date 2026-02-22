@@ -8,12 +8,17 @@ import { ThemedText } from '@/components/themed-text';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 import { Colors } from '@/constants/theme';
 import { getCurrentMedications, getUpcomingAppointments, getPendingLabs } from '@/data/visits';
+import { useAppData } from '@/contexts/data-context';
 
 export default function CarePlanScreen() {
   const router = useRouter();
   const scheme = useColorScheme() ?? 'light';
   const colors = Colors[scheme];
 
+  // Access visits from context to trigger re-renders when new visits are added
+  const { visits } = useAppData();
+
+  // These helpers read from the module-level store (synced via DataProvider)
   const meds = getCurrentMedications();
   const appointments = getUpcomingAppointments();
   const labs = getPendingLabs();
