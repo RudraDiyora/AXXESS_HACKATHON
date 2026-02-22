@@ -15,12 +15,10 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
       }}>
+      <Tabs.Screen name="index" options={{ href: null }} />
       <Tabs.Screen name="record" />
       <Tabs.Screen name="summary" />
       <Tabs.Screen name="medications" />
-      {/* Hide old boilerplate screens */}
-      <Tabs.Screen name="index" options={{ href: null }} />
-      <Tabs.Screen name="explore" options={{ href: null }} />
     </Tabs>
   );
 }

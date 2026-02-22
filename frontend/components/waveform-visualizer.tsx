@@ -14,7 +14,7 @@ import Animated, {
 const BAR_COUNT = 28;
 const BAR_WIDTH = 3;
 const BAR_GAP = 3;
-const MAX_HEIGHT = 64;
+const MAX_HEIGHT = 36;
 const MIN_HEIGHT = 4;
 
 interface WaveformVisualizerProps {
@@ -71,9 +71,9 @@ function Bar({ index, active, color }: { index: number; active: boolean; color: 
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'center',
-    height: MAX_HEIGHT + 8,
+    height: MAX_HEIGHT,
     gap: BAR_GAP,
   },
   bar: {
