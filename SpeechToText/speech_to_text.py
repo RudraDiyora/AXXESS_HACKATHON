@@ -58,7 +58,6 @@ class SPEECH_HANDLER:
         recording_int16 = (recording_int16 * 32767).astype('int16')
         write(self.recording_file, self.sample_rate, recording_int16)
         print("Saved live recording:", self.recording_file)
-        
 
         return self.recording_file
 
@@ -146,7 +145,7 @@ class SPEECH_HANDLER:
 
         client = OpenAI(
             base_url="https://api.featherless.ai/v1",
-            api_key=os.getenv("FEATHERLESS_KEY")
+            api_key="rc_dcec78432f3979ad51555b438e7927ed7ad464bccef09eeb3bc144f27f1d94d5"
         )
         response = client.chat.completions.create(
             model="deepseek-ai/DeepSeek-V3.1",

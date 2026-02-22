@@ -4,7 +4,7 @@ import os
 
 UPLOAD_URL = "https://api.assemblyai.com/v2/upload"
 TRANSCRIBE_URL = "https://api.assemblyai.com/v2/transcript"
-headers = {"authorization": os.getenv("API_KEY")}
+headers = {"authorization": "0c9ce00d058341dab8c059d20c7349ac"}
 
 
 def upload_file(file_path):
@@ -32,7 +32,7 @@ def transcribe(upload_url):
         json=json_data
     )
 
-    print(response.text)  # 👈 ADD THIS
+   # print(response.text)  # 👈 ADD THIS
     response.raise_for_status()
 
     return response.json()["id"]
@@ -54,7 +54,6 @@ def format_speakers(res):
     speaker_map = {}
     roles = ["Doctor", "Patient", "Other"]
     formatted = []
-
     for utt in res["utterances"]:
         speaker = utt["speaker"]
 
@@ -65,6 +64,17 @@ def format_speakers(res):
         formatted.append(f"{role}: {utt['text']}")
 
     return "\n".join(formatted)
+
+def generate_json(session_id, patient_info):
+    json_data = {
+        "session_id": session_id,
+        "patient": {
+            "name": patient_info["name"],
+            "age": patient_info["age"],
+            "gender": patient_info["gender"]
+        },
+        "messages": []
+    }
 
 if __name__ == "__main__":
 
@@ -80,7 +90,8 @@ if __name__ == "__main__":
         exit()
 
     final_text = get_transcription_result(transcript_id)
-    print("Transcription:\n", final_text)
+#   print("Transcription:\n", final_text)
 
     result = get_transcription_result(transcript_id)
     print(format_speakers(result))
+  #  print(result.items())
