@@ -2,8 +2,11 @@ from fastapi import FastAPI, HTTPException, UploadFile, File
 from pydantic import BaseModel, Field
 from openai import OpenAI
 import os
+import sys
 import json
 import subprocess
+import threading
+import time
 from datetime import date
 from pathlib import Path
 from dotenv import load_dotenv
@@ -257,7 +260,7 @@ def print_medical_report(session_id: str, medical_data: dict, patient_info: dict
     visit_type = medical_data.get("visit_type", "consultation")
     print(f"\nVISIT: {visit_type} | Clinician: {clinician}")
 
-    vitals = medical_data.get("vitals", {})
+    vitals = medical_data.get("vitals") or {}
     print("\nVITALS:")
     print(f"  BP     : {vitals.get('bp', 'N/A')}")
     print(f"  HR     : {vitals.get('hr', 'N/A')}")
@@ -336,8 +339,119 @@ def send_to_patient_summary_branch(output_json: dict, repo_root: Path | None = N
 
 
 # ---------------------------------------------------------------------------
-# FastAPI endpoint
+# Full pipeline: INPUT JSON -> extract -> save -> push to PSG branch
 # ---------------------------------------------------------------------------
+
+def run_full_pipeline(transcript_data: dict, output_dir: Path | None = None) -> dict:
+    """
+    Run the entire pipeline on a transcript dict (the OUTPUT.json format from
+    speech-to-text).  Returns the final output_json that was sent to PSG.
+
+    Steps:
+      1. Parse transcript (separate doctor/patient, extract patient info)
+      2. Build LLM prompt from conversation
+      3. Call Featherless LLM to extract clinical data
+      4. Save session files (doctor_log, patient_log, session JSON)
+      5. Push initial_file.json to Patient_Summary_Generator branch
+    """
+    if output_dir is None:
+        output_dir = Path("transcripts")
+
+    print("\n" + "=" * 70)
+    print("FULL PIPELINE — AUTO-RUN")
+    print("=" * 70)
+
+    # Step 1: Parse
+    parsed = parse_transcript(transcript_data)
+    sid = parsed["session_id"]
+    print(f"\n[1/5] Parsed transcript: {len(parsed['doctor_lines'])} doctor, "
+          f"{len(parsed['patient_lines'])} patient lines  (session: {sid})")
+
+    # Step 2: Build prompt
+    prompt = build_llm_prompt(parsed["conversation"])
+    print("[2/5] Built LLM prompt")
+
+    # Step 3: LLM extraction
+    print("[3/5] Calling Featherless LLM...")
+    medical = extract_medical_data(prompt)
+    print("      LLM response received!")
+    parsed["extracted_medical_data"] = medical
+
+    # Step 4: Save files
+    saved = save_session_files(parsed, output_dir)
+    output_json = saved.pop("output_json")
+    print(f"[4/5] Saved files:")
+    for label, path in saved.items():
+        print(f"       {label}: {path}")
+
+    # Step 5: Push to PSG
+    print("[5/5] Sending initial_file.json to Patient_Summary_Generator...")
+    send_to_patient_summary_branch(output_json)
+
+    # Console report
+    print_medical_report(sid, medical, parsed.get("patient"))
+
+    return output_json
+
+
+def watch_for_output_json(watch_path: str | Path, poll_interval: float = 2.0):
+    """
+    Poll *watch_path* for an OUTPUT.json file.  When it appears (or is
+    modified), auto-run the full pipeline and then rename the file so it
+    isn't processed again.
+    """
+    watch_path = Path(watch_path)
+    last_mtime = 0.0
+
+    print(f"\n[watcher] Monitoring {watch_path} for OUTPUT.json ...")
+
+    while True:
+        target = watch_path / "OUTPUT.json"
+        if target.exists():
+            mtime = target.stat().st_mtime
+            if mtime != last_mtime:
+                last_mtime = mtime
+                print(f"\n[watcher] OUTPUT.json detected (modified {time.ctime(mtime)})")
+                try:
+                    with open(target, "r", encoding="utf-8-sig") as f:
+                        data = json.load(f)
+                    output_json = run_full_pipeline(data)
+                    # Rename processed file so we don't re-process
+                    processed = watch_path / f"OUTPUT_processed_{int(mtime)}.json"
+                    target.rename(processed)
+                    print(f"[watcher] Renamed to {processed.name}")
+                    print(f"[watcher] Pipeline complete. Waiting for next file...")
+                except Exception as e:
+                    print(f"[watcher] ERROR: {e}")
+        time.sleep(poll_interval)
+
+
+# ---------------------------------------------------------------------------
+# FastAPI endpoints
+# ---------------------------------------------------------------------------
+
+@app.post("/process-transcript/")
+async def process_transcript_from_stt(file: UploadFile = File(...)):
+    """
+    Accepts OUTPUT.json from the speech-to-text branch, runs the full
+    pipeline, and returns the final clinical JSON.
+    """
+    try:
+        raw = await file.read()
+        transcript_data = json.loads(raw)
+    except json.JSONDecodeError:
+        raise HTTPException(status_code=400, detail="Invalid JSON.")
+
+    messages = transcript_data.get("messages", [])
+    if not messages:
+        raise HTTPException(status_code=400, detail="No messages in transcript.")
+
+    try:
+        output_json = run_full_pipeline(transcript_data)
+        return {"status": "success", "output": output_json}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @app.post("/process-json-transcript/")
 async def process_json_transcript(file: UploadFile = File(...)):
@@ -386,3 +500,55 @@ async def process_json_transcript(file: UploadFile = File(...)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+# ---------------------------------------------------------------------------
+# CLI entry point
+# ---------------------------------------------------------------------------
+
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Text Extractor Pipeline — processes speech-to-text OUTPUT.json"
+    )
+    parser.add_argument(
+        "input", nargs="?", default=None,
+        help="Path to OUTPUT.json (or any transcript JSON). "
+             "If omitted, starts the file watcher.",
+    )
+    parser.add_argument(
+        "--watch", action="store_true",
+        help="Watch the current directory for OUTPUT.json and auto-run on arrival.",
+    )
+    parser.add_argument(
+        "--watch-dir", default=".",
+        help="Directory to watch for OUTPUT.json (default: current dir).",
+    )
+    parser.add_argument(
+        "--serve", action="store_true",
+        help="Start the FastAPI server (uvicorn) on port 8000.",
+    )
+
+    args = parser.parse_args()
+
+    if args.serve:
+        import uvicorn
+        print("Starting FastAPI server on http://0.0.0.0:8000")
+        print("  POST /process-transcript/       — accepts OUTPUT.json from STT")
+        print("  POST /process-json-transcript/  — legacy endpoint")
+        uvicorn.run(app, host="0.0.0.0", port=8000)
+
+    elif args.watch or args.input is None:
+        watch_dir = Path(args.watch_dir).resolve()
+        watch_for_output_json(watch_dir)
+
+    else:
+        # Direct run on a specific file
+        input_path = Path(args.input)
+        if not input_path.exists():
+            print(f"ERROR: {input_path} not found.")
+            sys.exit(1)
+        with open(input_path, "r", encoding="utf-8-sig") as f:
+            data = json.load(f)
+        run_full_pipeline(data)
