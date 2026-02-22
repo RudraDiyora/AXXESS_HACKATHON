@@ -1,0 +1,34 @@
+{
+  "session_id": "session_123",
+  "patient": {
+    "name": "John Doe",
+    "age": 30,
+    "gender": "male"
+  },
+  "messages": [
+    {
+      "speaker": "Doctor",
+      "text": " Hello."
+    },
+    {
+      "speaker": "Patient",
+      "text": " Hi."
+    },
+    {
+      "speaker": "Doctor",
+      "text": " What are your symptoms today?"
+    },
+    {
+      "speaker": "Patient",
+      "text": " My knee is hurting very bad."
+    },
+    {
+      "speaker": "Doctor",
+      "text": " Oh. Why did you hurt your knee?"
+    },
+    {
+      "speaker": "Patient",
+      "text": " I don't know."
+    }
+  ]
+}
