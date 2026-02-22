@@ -1,0 +1,130 @@
+{
+  "patient": {
+    "name": "Margaret Williams",
+    "age": 67,
+    "preferred_language": "en",
+    "phone": "(555) 123-4567"
+  },
+  "caregiver": {
+    "name": "Sarah Williams",
+    "relationship": "Daughter",
+    "phone": "(555) 987-6543",
+    "email": "sarah.williams@email.com"
+  },
+  "visits": [
+    {
+      "id": "1",
+      "doctorName": "Dr. Patel",
+      "specialty": "Endocrinology",
+      "visitDate": "February 21, 2026",
+      "chiefComplaint": "High blood sugar and increased thirst",
+      "summaryText": "You visited the doctor about your blood sugar being too high. You have been feeling very thirsty and tired, and using the bathroom often for the past 3 weeks. Your HbA1c level is 9.2%, which is above the target. The doctor is increasing your Metformin dose and adding a new medicine called Empagliflozin. You need follow-up blood work in 4 weeks.",
+      "vitals": {
+        "bp": "142/88",
+        "hr": 94,
+        "temp": 98.6,
+        "o2_sat": 96
+      },
+      "symptoms": ["dyspnea", "chest tightness", "mild fatigue"],
+      "diagnoses": [
+        { "name": "Type 2 Diabetes Mellitus", "icdCode": "E11.65", "notes": "Uncontrolled with hyperglycemia" },
+        { "name": "Essential Hypertension", "icdCode": "I10" }
+      ],
+      "medications": [
+        { "name": "Metformin", "dosage": "1000 mg", "frequency": "Twice daily", "notes": "Dose increased from 500 mg", "isNew": false },
+        { "name": "Empagliflozin", "dosage": "10 mg", "frequency": "Once daily", "notes": "New prescription", "isNew": true },
+        { "name": "Lisinopril", "dosage": "10 mg", "frequency": "Once daily", "isNew": false }
+      ],
+      "followUps": [
+        { "description": "Lab work — fasting glucose & HbA1c", "date": "March 21, 2026", "provider": "Quest Diagnostics" },
+        { "description": "Follow-up appointment", "date": "April 4, 2026", "provider": "Dr. Patel" }
+      ],
+      "labTests": [
+        { "name": "HbA1c", "status": "completed", "result": "9.2%", "date": "February 21, 2026", "notes": "Above target (goal < 7%)" },
+        { "name": "Fasting Glucose", "status": "ordered", "date": "March 21, 2026" },
+        { "name": "Kidney Function Panel", "status": "ordered", "date": "March 21, 2026", "notes": "Baseline before Empagliflozin" }
+      ],
+      "transcript": [
+        { "speaker": "doctor", "text": "What brings you in today?", "timestamp": 0 },
+        { "speaker": "patient", "text": "I've been really thirsty and using the bathroom a lot.", "timestamp": 5 },
+        { "speaker": "doctor", "text": "How long has this been going on?", "timestamp": 12 },
+        { "speaker": "patient", "text": "About three weeks now. I also feel tired all the time.", "timestamp": 16 },
+        { "speaker": "doctor", "text": "Your HbA1c came back at 9.2%. We need to adjust your medication.", "timestamp": 24 },
+        { "speaker": "patient", "text": "Is that bad?", "timestamp": 32 },
+        { "speaker": "doctor", "text": "It's higher than we'd like. Our goal is under 7%. I'm going to increase your Metformin and start Empagliflozin.", "timestamp": 35 }
+      ]
+    },
+    {
+      "id": "2",
+      "doctorName": "Dr. Patel",
+      "specialty": "Endocrinology",
+      "visitDate": "January 10, 2026",
+      "chiefComplaint": "Routine diabetes and blood pressure check",
+      "summaryText": "This was a follow-up visit to check your diabetes and blood pressure. Your blood sugar has been mostly stable but your HbA1c was 7.8%, slightly above the goal. Your blood pressure was 138/88, which is a bit high. The doctor kept your current medications the same and asked you to monitor your blood pressure at home.",
+      "vitals": {
+        "bp": "138/88",
+        "hr": 78,
+        "temp": 98.4,
+        "o2_sat": 98
+      },
+      "symptoms": [],
+      "diagnoses": [
+        { "name": "Type 2 Diabetes Mellitus", "icdCode": "E11.65" },
+        { "name": "Essential Hypertension", "icdCode": "I10", "notes": "Borderline controlled" }
+      ],
+      "medications": [
+        { "name": "Metformin", "dosage": "500 mg", "frequency": "Twice daily", "isNew": false },
+        { "name": "Lisinopril", "dosage": "10 mg", "frequency": "Once daily", "isNew": false }
+      ],
+      "followUps": [
+        { "description": "Follow-up in 6 weeks", "date": "February 21, 2026", "provider": "Dr. Patel" }
+      ],
+      "labTests": [
+        { "name": "HbA1c", "status": "completed", "result": "7.8%", "date": "January 10, 2026", "notes": "Slightly above target" },
+        { "name": "Basic Metabolic Panel", "status": "completed", "result": "Normal", "date": "January 10, 2026" }
+      ],
+      "transcript": [
+        { "speaker": "doctor", "text": "How have you been feeling since our last visit?", "timestamp": 0 },
+        { "speaker": "patient", "text": "Pretty good, but my readings have been up and down.", "timestamp": 4 },
+        { "speaker": "doctor", "text": "Let's take a look at your numbers today.", "timestamp": 10 }
+      ]
+    },
+    {
+      "id": "3",
+      "doctorName": "Dr. Johnson",
+      "specialty": "Primary Care",
+      "visitDate": "November 15, 2025",
+      "chiefComplaint": "Annual physical exam",
+      "summaryText": "You had your yearly check-up. Everything looked mostly fine. Your blood pressure was slightly elevated at 140/90. The doctor started you on Lisinopril for your blood pressure and ordered routine bloodwork including cholesterol and blood sugar tests.",
+      "vitals": {
+        "bp": "140/90",
+        "hr": 72,
+        "temp": 98.6,
+        "o2_sat": 99
+      },
+      "symptoms": ["mild fatigue"],
+      "diagnoses": [
+        { "name": "Essential Hypertension", "icdCode": "I10", "notes": "Newly diagnosed" }
+      ],
+      "medications": [
+        { "name": "Lisinopril", "dosage": "10 mg", "frequency": "Once daily", "notes": "New medication for blood pressure", "isNew": true }
+      ],
+      "followUps": [
+        { "description": "Blood pressure re-check", "date": "December 15, 2025", "provider": "Dr. Johnson" },
+        { "description": "Review lab results", "date": "December 1, 2025", "provider": "Dr. Johnson" }
+      ],
+      "labTests": [
+        { "name": "Complete Blood Count", "status": "completed", "result": "Normal", "date": "November 15, 2025" },
+        { "name": "Lipid Panel", "status": "completed", "result": "Total cholesterol 215 mg/dL", "date": "November 15, 2025", "notes": "Borderline high" },
+        { "name": "HbA1c", "status": "completed", "result": "6.8%", "date": "November 15, 2025", "notes": "Pre-diabetic range" }
+      ],
+      "transcript": [
+        { "speaker": "doctor", "text": "Let's go through your annual physical. How have you been feeling overall?", "timestamp": 0 },
+        { "speaker": "patient", "text": "Generally fine, maybe a little more tired than usual.", "timestamp": 6 },
+        { "speaker": "doctor", "text": "I noticed your blood pressure is on the high side. We should address that.", "timestamp": 14 },
+        { "speaker": "patient", "text": "Is it serious?", "timestamp": 22 },
+        { "speaker": "doctor", "text": "Not yet, but we want to keep it under control. I'll start you on a low dose of Lisinopril.", "timestamp": 25 }
+      ]
+    }
+  ]
+}
